@@ -32,6 +32,7 @@ mkdir -p ./AppDir/bin
 cd keeperfx
 make -f linux.mk all -j$(nproc)
 mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
+cd .. && rm -rf keeperfx
 
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
