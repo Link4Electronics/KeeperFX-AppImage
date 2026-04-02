@@ -35,6 +35,7 @@ mv -v bin/keeperfx ../AppDir/bin
 
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
+sed find_package(tl-expected REQUIRED) CMakeLists.txt
 mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake .. -DCMAKE_CXX_FLAGS="-Wno-error=unused-result" -DCMAKE_BUILD_TYPE=Release
 make -j$(nproc)
