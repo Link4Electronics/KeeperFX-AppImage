@@ -32,17 +32,17 @@ make-aur-package lief
 # If the application needs to be manually built that has to be done down here
 echo "Making Nightly build of KeeperFX..."
 echo "---------------------------------------------------------------"
-git clone --recursive https://github.com/dkfans/keeperfx
-mkdir -p ./AppDir/bin
-cd keeperfx
-sed -i 's/-Werror/-Wno-error/g' linux.mk
+#git clone --recursive https://github.com/dkfans/keeperfx
+#mkdir -p ./AppDir/bin
+#cd keeperfx
+#sed -i 's/-Werror/-Wno-error/g' linux.mk
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/x86-64/armv8-a/g' Makefile
     sed -i 's/x86-64/armv8-a/g' linux.mk
 fi
 #make -f linux.mk all -j$(nproc)
 #mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
-cd .. && rm -rf keeperfx
+#cd .. && rm -rf keeperfx
 
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
