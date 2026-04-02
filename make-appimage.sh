@@ -8,7 +8,7 @@ export ARCH VERSION
 export OUTPATH=./dist
 export ADD_HOOKS="self-updater.bg.hook"
 export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*$ARCH.AppImage.zsync"
-export ICON=PATH_OR_URL_TO_ICON
+export ICON=https://github.com/dkfans/keeperfx/blob/master/res/keeperfx_icon256-24bpp.png?raw=true
 export DESKTOP=PATH_OR_URL_TO_DESKTOP_ENTRY
 export DEPLOY_QT=1
 
