@@ -24,7 +24,7 @@ get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini
 
 # Comment this out if you need an AUR package
 #make-aur-package openmpt
-make-aur-package lief
+#make-aur-package lief
 
 # If the application needs to be manually built that has to be done down here
 echo "Making Nightly build of KeeperFX..."
@@ -32,6 +32,7 @@ echo "---------------------------------------------------------------"
 git clone --recursive https://github.com/dkfans/keeperfx
 mkdir -p ./AppDir/bin
 cd keeperfx
+git submodule update --init --recursive
 make -f linux.mk all -j$(nproc)
 mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
 cd .. && rm -rf keeperfx
