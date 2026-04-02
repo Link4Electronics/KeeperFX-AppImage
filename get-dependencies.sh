@@ -41,8 +41,11 @@ git clone --recursive https://github.com/dkfans/keeperfx
 mkdir -p ./AppDir/bin
 cd keeperfx
 mkdir -p deps/astronomy deps/centijson deps/enet6 deps/libcurl
-curl -L -o deps/enet6-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260213/enet6-lin64.tar.gz"
+curl -L -o deps/enet6-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/enet6-lin64.tar.gz"
 tar -xzvf deps/enet6-lin64.tar.gz -C deps/enet6
+curl -L -o deps/centijson-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/centijson-lin64.tar.gz"
+tar -xzvf deps/centijson-lin64.tar.gz -C deps/centijson
+
 sed -i 's/-Werror/-Wno-error/g' linux.mk
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/x86-64/armv8-a/g' Makefile
