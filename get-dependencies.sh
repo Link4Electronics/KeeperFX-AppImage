@@ -29,7 +29,7 @@ echo "---------------------------------------------------------------"
 git clone --recursive https://github.com/dkfans/keeperfx
 mkdir -p ./AppDir/bin
 cd keeperfx
-make -j$(nproc)
+make -f linux.mk all -j$(nproc)
 
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
