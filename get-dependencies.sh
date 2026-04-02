@@ -30,6 +30,7 @@ git clone --recursive https://github.com/dkfans/keeperfx
 mkdir -p ./AppDir/bin
 cd keeperfx
 make -f linux.mk all -j$(nproc)
+mv -v bin/keeperfx ../AppDir/bin
 
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
