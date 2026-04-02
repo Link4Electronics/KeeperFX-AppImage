@@ -52,6 +52,9 @@ fi
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
 sed -i '2i find_package(tl-expected REQUIRED)' CMakeLists.txt
+sed -i -e 's/\/keeperfx\.exe/\/keeperfx/g' \
+       -e '/params\.prepend("wine");/d' \
+       -e '/process->start("wine", params);/d' src/game.cpp
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
 make -j$(nproc)
