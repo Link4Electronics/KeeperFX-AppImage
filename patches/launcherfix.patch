@@ -1,0 +1,108 @@
+diff --git a/src/game.cpp b/src/game.cpp
+index 4d18c96..36f6d9e 100644
+--- a/src/game.cpp
++++ b/src/game.cpp
+@@ -102,9 +102,17 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
+     // For now it's only the .exe release
+     QString keeperfxBin;
+     if (Settings::getLauncherSetting("GAME_HEAVY_LOG_ENABLED").toBool() == true) {
++#ifdef Q_OS_WINDOWS
+         keeperfxBin = QApplication::applicationDirPath() + "/keeperfx_hvlog.exe";
++#else
++        keeperfxBin = QApplication::applicationDirPath() + "/keeperfx_hvlog";
++#endif
+     } else {
++#ifdef Q_OS_WINDOWS
+         keeperfxBin = QApplication::applicationDirPath() + "/keeperfx.exe";
++#else
++        keeperfxBin = QApplication::applicationDirPath() + "/keeperfx";
++#endif
+     }
+ 
+     // Start the process
+@@ -112,19 +120,8 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
+         qInfo() << "Starting game (Windows)";
+         process->start(keeperfxBin, params);
+     #else
+-        if (qEnvironmentVariableIsSet("FLATPAK_ID")) {
+-            qInfo() << "Starting game (Linux: Flatpak -> Wine)";
+-            // Run Wine outside Flatpak
+-            params.prepend(keeperfxBin);
+-            params.prepend("wine");
+-            params.prepend("--host");
+-            process->start("flatpak-spawn", params);
+-        } else {
+-            qInfo() << "Starting game (Linux: Wine)";
+-            // Normal Wine execution
+-            params.prepend(keeperfxBin);
+-            process->start("wine", params);
+-        }
++        qInfo() << "Starting game (Linux)";
++        process->start(keeperfxBin, params);
+     #endif
+ 
+     // Log the full command line
+diff --git a/src/helper.h b/src/helper.h
+index 52202f7..b23e547 100644
+--- a/src/helper.h
++++ b/src/helper.h
+@@ -26,7 +26,11 @@ public:
+     static bool isKeeperFxInstalled()
+     {
+         // Check for 'keeperfx.exe' file in app directory
++#ifdef Q_OS_WINDOWS
+         QFile keeperFxBin (QCoreApplication::applicationDirPath() + "/keeperfx.exe");
++#else
++        QFile keeperFxBin (QCoreApplication::applicationDirPath() + "/keeperfx");
++#endif
+         return (keeperFxBin.exists());
+     }
+ 
+diff --git a/src/kfxversion.cpp b/src/kfxversion.cpp
+index 02eb9f7..1992097 100644
+--- a/src/kfxversion.cpp
++++ b/src/kfxversion.cpp
+@@ -138,9 +138,17 @@ QString KfxVersion::getVersionString(const QString& filePath){
+ 
+ QString KfxVersion::getVersionStringFromAppDir()
+ {
++#ifdef Q_OS_WINDOWS
+     return KfxVersion::getVersionString(
+         QCoreApplication::applicationDirPath() + "/keeperfx.exe"
+     );
++#else
++    QFile versionFile(QCoreApplication::applicationDirPath() + "/keeperfx-version.txt");
++    if (versionFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
++        return QString::fromUtf8(versionFile.readAll()).trimmed();
++    }
++    return QString();
++#endif
+ }
+ 
+ KfxVersion::VersionInfo KfxVersion::getVersionFromString(QString versionString)
+diff --git a/src/launchermainwindow.cpp b/src/launchermainwindow.cpp
+index 0ad8ba0..6addf42 100644
+--- a/src/launchermainwindow.cpp
++++ b/src/launchermainwindow.cpp
+@@ -430,7 +430,7 @@ void LauncherMainWindow::setupPlayExtraMenu()
+     }
+ 
+     // Heavylog toggle
+-    QFile heavyLogBin(QCoreApplication::applicationDirPath() + "/keeperfx_hvlog.exe");
++    QFile heavyLogBin(QCoreApplication::applicationDirPath() + "/keeperfx_hvlog");
+     if (heavyLogBin.exists()) {
+         // Create menu item
+         QAction *heavyLogAction = menu->addAction(tr("Heavylog", "Menu"));
+diff --git a/src/settings.cpp b/src/settings.cpp
+index a0c809f..efd584c 100644
+--- a/src/settings.cpp
++++ b/src/settings.cpp
+@@ -20,7 +20,7 @@ QMap<QString, QVariant> Settings::defaultLauncherSettingsMap = {
+ 
+     // Launcher settings
+     // "CHECK_FOR_UPDATES_RELEASE" is hardcoded in 'copyMissingLauncherSettings()'
+-    {"CHECK_FOR_UPDATES_ENABLED", true},
++    {"CHECK_FOR_UPDATES_ENABLED", false},
+     {"CHECK_FOR_UPDATES_INTERVAL_DAYS", 0},
+     {"CHECK_FOR_UPDATES_LAST_TIMESTAMP", QDateTime::currentDateTimeUtc().toString(Qt::ISODate)},
+     {"AUTO_UPDATE", false},

@@ -1,0 +1,36 @@
+#!/bin/sh
+export SHARUN_DIR="$APPDIR"
+
+dir=${XDG_CONFIG_HOME:-$HOME/.config}/keeperfx
+
+if [ -d "$dir" ]; then
+    find "$dir" -type l -delete
+fi
+
+mkdir -p "$dir"
+
+marker=$(cd "$APPDIR"/bin && find . -type f | sort | cksum)
+
+if [ "$marker" != "$(cat "$dir"/.bundle-marker 2>/dev/null || :)" ]; then
+    if [ -f "$dir"/keeperfx.cfg ]; then
+        mv -f "$dir"/keeperfx.cfg "$dir"/keeperfx.cfg.keep
+    fi
+    cp -R "$APPDIR"/bin/. "$dir"/
+    if [ -f "$dir"/keeperfx.cfg.keep ]; then
+        mv -f "$dir"/keeperfx.cfg.keep "$dir"/keeperfx.cfg
+    fi
+    printf '%s\n' "$marker" > "$dir"/.bundle-marker
+fi
+
+if [ -f "$APPDIR"/bin/keeperfx-launcher-qt ]; then
+    cp -f "$APPDIR"/bin/keeperfx-launcher-qt "$dir"/keeperfx-launcher-qt.new
+    mv -f "$dir"/keeperfx-launcher-qt.new "$dir"/keeperfx-launcher-qt
+fi
+
+rm -f "$dir"/qt.conf
+
+cd "$dir"
+
+if [ -x "$dir"/keeperfx-launcher-qt ]; then
+    exec "$dir"/keeperfx-launcher-qt "$@"
+fi
