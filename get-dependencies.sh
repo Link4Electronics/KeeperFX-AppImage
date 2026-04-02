@@ -9,7 +9,6 @@ echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
     libnatpmp   \
     openal      \
-    openmpt     \
     python      \
     sdl2        \
     sdl2_image  \
@@ -22,6 +21,7 @@ echo "---------------------------------------------------------------"
 get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini
 
 # Comment this out if you need an AUR package
+make-aur-package openmpt
 make-aur-package lief
 
 # If the application needs to be manually built that has to be done down here
