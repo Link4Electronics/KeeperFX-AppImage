@@ -45,13 +45,14 @@ curl -L -o deps/enet6-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/
 tar -xzvf deps/enet6-lin64.tar.gz -C deps/enet6
 curl -L -o deps/centijson-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/centijson-lin64.tar.gz"
 tar -xzvf deps/centijson-lin64.tar.gz -C deps/centijson
-
 sed -i 's/-Werror/-Wno-error/g' linux.mk
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/x86-64/armv8-a/g' Makefile
     sed -i 's/x86-64/armv8-a/g' linux.mk
-fi
+    make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
+else
 make -f linux.mk all -j$(nproc)
+fi
 mv -v bin/keeperfx ../AppDir/bin
 cd .. && rm -rf keeperfx
 
@@ -64,7 +65,6 @@ sed -i -e 's/\/keeperfx\.exe/\/keeperfx/g' \
        #-e '/process->start("wine", params);/d' src/game.cpp
 sed -i 's/\/keeperfx\.exe/\/keeperfx/g' src/kfxversion.cpp src/launchermainwindow.cpp
 mkdir build && cd build
-#cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
-cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -Wno-error=narrowing -fsigned-char -O3"
+cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
 make -j$(nproc)
 mv -v keeperfx-launcher-qt ../../AppDir/bin
