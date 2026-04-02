@@ -22,10 +22,10 @@ echo "---------------------------------------------------------------"
 git clone --recursive https://github.com/dkfans/keeperfx
 mkdir -p ./AppDir/bin
 cd keeperfx
-make
+make -j$(nproc)
 
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
-make -j
+make -j$(nproc)
