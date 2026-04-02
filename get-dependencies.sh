@@ -49,7 +49,7 @@ sed -i 's/-Werror/-Wno-error/g' linux.mk
 if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/x86-64/armv8-a/g' Makefile
     sed -i 's/x86-64/armv8-a/g' linux.mk
-    make -f linux.mk CXX="-fsigned-char -Wno-error=narrowing" CC="-fsigned-char" all -j$(nproc)
+    make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
 else
 make -f linux.mk all -j$(nproc)
 fi
