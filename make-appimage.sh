@@ -9,11 +9,12 @@ export OUTPATH=./dist
 export ADD_HOOKS="self-updater.bg.hook"
 export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*$ARCH.AppImage.zsync"
 export ICON=https://github.com/dkfans/keeperfx/blob/master/res/keeperfx_icon256-24bpp.png?raw=true
-export DESKTOP=PATH_OR_URL_TO_DESKTOP_ENTRY
+export DESKTOP=DUMMY
+export MAIN_BIN=keeperfx-launcher-qt
 export DEPLOY_QT=1
 
 # Deploy dependencies
-quick-sharun /usr/bin/keeperfx
+quick-sharun ./AppDir/bin/keeperfx-launcher-qt ./AppDir/bin/keeperfx.exe
 
 # Additional changes can be done in between here
 
