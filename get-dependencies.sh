@@ -9,13 +9,16 @@ echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
     cmake          \
     enet           \
+    kvantum        \
     libnatpmp      \
     libspng        \
     luajit         \
+    lxqt-qtplugin  \
     miniupnpc      \
     minizip        \
     openal         \
     python         \
+    qt6ct          \
     sdl2           \
     sdl2_image     \
     sdl2_mixer     \
@@ -29,7 +32,7 @@ get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini
 
 # Comment this out if you need an AUR package
 make-aur-package lief
-make-aur-package openmpt
+#make-aur-package openmpt
 
 # If the application needs to be manually built that has to be done down here
 echo "Making Nightly build of KeeperFX..."
