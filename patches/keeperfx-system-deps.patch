@@ -1,0 +1,55 @@
+diff --git a/build/cmake/modules/Dependencies.cmake b/build/cmake/modules/Dependencies.cmake
+index 1e58846..162da6b 100644
+--- a/build/cmake/modules/Dependencies.cmake
++++ b/build/cmake/modules/Dependencies.cmake
+@@ -200,17 +200,18 @@ else()
+     pkg_check_modules(MINIZIP    REQUIRED IMPORTED_TARGET minizip)
+     pkg_check_modules(ZLIB       REQUIRED IMPORTED_TARGET zlib)
+ 
+-    # Not reliably packaged; use the prebuilt lin64 static libs (as linux.mk does).
+-    kfx_fetch(astronomy "${KFX_DEPS_BASE}/20250418/astronomy-lin64.tar.gz")
+-    kfx_fetch(centijson "${KFX_DEPS_BASE}/20250418/centijson-lin64.tar.gz")
+-    kfx_fetch(enet6     "${KFX_DEPS_BASE}/20260213/enet6-lin64.tar.gz")
+-    kfx_fetch(libcurl   "${KFX_DEPS_BASE}/20260310/libcurl-lin64.tar.gz")
++    pkg_check_modules(CURL REQUIRED IMPORTED_TARGET libcurl)
+ 
+-    kfx_imported(astronomy_static "${D}/astronomy/libastronomy.a" "${D}/astronomy/include")
+-    kfx_imported(centijson_static "${D}/centijson/libjson.a"      "${D}/centijson/include")
+-    kfx_imported(enet6_static     "${D}/enet6/libenet6.a"         "${D}/enet6/include")
+-    kfx_imported(curl_static      "${D}/libcurl/lib/libcurl.a"    "${D}/libcurl/include")
+-    target_link_libraries(curl_static INTERFACE ssl crypto zstd)
++    find_library(ASTRONOMY_LIBRARY NAMES astronomy REQUIRED)
++    find_path(ASTRONOMY_INCLUDE_DIR NAMES astronomy.h REQUIRED)
++    find_library(CENTIJSON_LIBRARY NAMES json REQUIRED)
++    find_path(CENTIJSON_INCLUDE_DIR NAMES json.h REQUIRED)
++    find_library(ENET6_LIBRARY NAMES enet6 REQUIRED)
++    find_path(ENET6_INCLUDE_DIR NAMES enet6/enet.h REQUIRED)
++
++    kfx_imported(astronomy_static "${ASTRONOMY_LIBRARY}" "${ASTRONOMY_INCLUDE_DIR}")
++    kfx_imported(centijson_static "${CENTIJSON_LIBRARY}" "${CENTIJSON_INCLUDE_DIR}")
++    kfx_imported(enet6_static     "${ENET6_LIBRARY}"     "${ENET6_INCLUDE_DIR}")
+ 
+     add_library(centitoml OBJECT "${KFX_CENTITOML_SRC}/toml_api.c")
+     target_link_libraries(centitoml PUBLIC centijson_static)
+@@ -262,7 +263,7 @@ function(kfx_link_dependencies TARGET)
+             kfx_sdl3
+             PkgConfig::FFMPEG PkgConfig::OPENAL PkgConfig::LUAJIT
+             PkgConfig::SPNG PkgConfig::MINIZIP PkgConfig::ZLIB
+-            astronomy_static centijson_static enet6_static curl_static
++            astronomy_static centijson_static enet6_static PkgConfig::CURL
+             centitoml
+             miniupnpc natpmp dl)
+     endif()
+diff --git a/build/cmake/modules/Helpers.cmake b/build/cmake/modules/Helpers.cmake
+index ab4fdfa..241e58c 100644
+--- a/build/cmake/modules/Helpers.cmake
++++ b/build/cmake/modules/Helpers.cmake
+@@ -26,7 +26,7 @@ function(apply_keeperfx_warnings TARGET)
+             $<$<COMPILE_LANGUAGE:C>:-Wimplicit>)
+     else()
+         target_compile_options(${TARGET} PRIVATE
+-            -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unknown-pragmas
++            -Wall -Wextra -Wno-unused-parameter -Wno-unknown-pragmas
+             -Wno-format-truncation -Wno-sign-compare
+             -g -O3 -march=x86-64
+             $<$<COMPILE_LANGUAGE:C>:-Wno-absolute-value>)
