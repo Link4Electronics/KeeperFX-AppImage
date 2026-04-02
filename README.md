@@ -11,7 +11,7 @@
 </p>
 
 
-| Latest Stable Release | Upstream URL |
+| Latest Nightly Release | Upstream URL |
 | :---: | :---: |
 | [Click here](https://github.com/pkgforge-dev/KeeperFX-AppImage/releases/latest) | [Click here](https://github.com/dkfans/keeperfx) |
 
