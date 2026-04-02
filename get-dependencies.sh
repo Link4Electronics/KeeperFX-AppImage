@@ -53,8 +53,9 @@ git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
 sed -i '2i find_package(tl-expected REQUIRED)' CMakeLists.txt
 sed -i -e 's/\/keeperfx\.exe/\/keeperfx/g' \
-       -e '/params\.prepend("wine");/d' \
-       -e '/process->start("wine", params);/d' src/game.cpp
+       -e sed 's:wine:./keeperfx:g' src/game.cpp
+       #-e '/params\.prepend("wine");/d' \
+       #-e '/process->start("wine", params);/d' src/game.cpp
 sed -i 's/\/keeperfx\.exe/\/keeperfx/g' src/kfxversion.cpp
 sed -i 's/\/keeperfx\.exe/\/keeperfx/g' src/launchermainwindow.cpp
 mkdir build && cd build
