@@ -35,6 +35,10 @@ git clone --recursive https://github.com/dkfans/keeperfx
 mkdir -p ./AppDir/bin
 cd keeperfx
 sed -i 's/-Werror/-Wno-error/g' linux.mk
+if [ "$ARCH" = "aarch64" ]; then
+    sed -i 's/x86-64/armv8-a/g' Makefile
+    sed -i 's/x86-64/armv8-a/g' linux.mk
+fi
 make -f linux.mk all -ij$(nproc)
 mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
 cd .. && rm -rf keeperfx
