@@ -27,8 +27,7 @@ echo "---------------------------------------------------------------"
 get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini
 
 # Comment this out if you need an AUR package
-#make-aur-package openmpt
-#make-aur-package lief
+make-aur-package lief
 
 # If the application needs to be manually built that has to be done down here
 echo "Making Nightly build of KeeperFX..."
@@ -41,8 +40,8 @@ if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/x86-64/armv8-a/g' Makefile
     sed -i 's/x86-64/armv8-a/g' linux.mk
 fi
-make -f linux.mk all -ij$(nproc)
-mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
+#make -f linux.mk all -j$(nproc)
+#mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
 cd .. && rm -rf keeperfx
 
 git clone https://github.com/dkfans/QTLauncher
