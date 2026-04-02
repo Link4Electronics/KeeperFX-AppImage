@@ -36,7 +36,7 @@ cd .. && rm -rf keeperfx
 
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
-sed find_package(tl-expected REQUIRED) CMakeLists.txt
+sed -i '2i find_package(tl-expected REQUIRED)' CMakeLists.txt
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
 make -j$(nproc)
