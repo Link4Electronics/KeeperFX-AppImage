@@ -12,6 +12,7 @@ export ICON=https://github.com/dkfans/keeperfx/blob/master/res/keeperfx_icon256-
 export DESKTOP=DUMMY
 export MAIN_BIN=keeperfx-launcher-qt
 export DEPLOY_QT=1
+export QT_DIR=qt6
 
 # Deploy dependencies
 quick-sharun ./AppDir/bin/keeperfx-launcher-qt ./AppDir/bin/keeperfx.exe
