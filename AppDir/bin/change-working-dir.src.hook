@@ -1,4 +1,5 @@
 #!/bin/false
 dir=${XDG_CONFIG_HOME:-~/.config}/keeperfx
 mkdir -p "$dir"
+ln -sf "$APPDIR"/bin/keeperfx "$dir"/keeperfx/keeperfx
 cd "$dir"
