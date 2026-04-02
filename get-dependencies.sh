@@ -52,7 +52,7 @@ if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/x86-64/armv8-a/g' linux.mk
 fi
 make -f linux.mk all -j$(nproc)
-mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
+mv -v bin/keeperfx ../AppDir/bin/keeperfx
 cd .. && rm -rf keeperfx
 
 git clone https://github.com/dkfans/QTLauncher
