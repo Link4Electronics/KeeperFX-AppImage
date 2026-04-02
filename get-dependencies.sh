@@ -7,14 +7,15 @@ ARCH=$(uname -m)
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
-    libnatpmp  \
-    openal     \
-    openmpt    \
-    python     \
-    sdl2       \
-    sdl2_image \
-    sdl2_mixer \
-    sdl2_net
+    libnatpmp   \
+    openal      \
+    openmpt     \
+    python      \
+    sdl2        \
+    sdl2_image  \
+    sdl2_mixer  \
+    sdl2_net    \
+    tl-expected
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
