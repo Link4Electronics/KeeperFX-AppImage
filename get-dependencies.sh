@@ -10,8 +10,10 @@ pacman -Syu --noconfirm \
     cmake       \
     enet        \
     libnatpmp   \
+    libspng     \
     luajit      \
     miniupnpc   \
+    minizip-ng  \
     openal      \
     python      \
     sdl2        \
