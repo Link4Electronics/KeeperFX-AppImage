@@ -46,7 +46,7 @@ if [ "$ARCH" = "aarch64" ]; then
     sed -i 's/x86-64/armv8-a/g' Makefile
     sed -i 's/x86-64/armv8-a/g' linux.mk
 fi
-make -f linux.mk all -j$(nproc)
+make -f linux.mk -j$(nproc) deps/enet6/include/enet6/enet.h
 mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
 cd .. && rm -rf keeperfx
 
