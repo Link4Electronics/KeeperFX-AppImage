@@ -64,6 +64,7 @@ sed -i -e 's/\/keeperfx\.exe/\/keeperfx/g' \
        #-e '/process->start("wine", params);/d' src/game.cpp
 sed -i 's/\/keeperfx\.exe/\/keeperfx/g' src/kfxversion.cpp src/launchermainwindow.cpp
 mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
+#cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
+cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -Wno-error=narrowing -fsigned-char -O3"
 make -j$(nproc)
 mv -v keeperfx-launcher-qt ../../AppDir/bin
