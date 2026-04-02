@@ -7,7 +7,7 @@
 [![Latest Stable Release](https://img.shields.io/github/v/release/pkgforge-dev/KeeperFX-AppImage)](https://github.com/pkgforge-dev/KeeperFX-AppImage/releases/latest)
 
 <p align="center">
-  <img src="https://github.com/pkgforge-dev.png" width="128" />
+  <img src="https://github.com/dkfans/keeperfx/blob/master/res/keeperfx_icon512-24bpp.png" width="128" />
 </p>
 
 
