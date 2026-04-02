@@ -11,6 +11,7 @@ pacman -Syu --noconfirm \
     enet        \
     libnatpmp   \
     luajit      \
+    miniupnpc   \
     openal      \
     python      \
     sdl2        \
