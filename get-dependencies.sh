@@ -13,7 +13,7 @@ pacman -Syu --noconfirm \
     libspng     \
     luajit      \
     miniupnpc   \
-    minizip-ng  \
+    minizip     \
     openal      \
     python      \
     sdl2        \
