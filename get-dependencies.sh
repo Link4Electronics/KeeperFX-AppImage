@@ -33,7 +33,6 @@ echo "---------------------------------------------------------------"
 git clone --recursive https://github.com/dkfans/keeperfx
 mkdir -p ./AppDir/bin
 cd keeperfx
-git submodule update --init --recursive
 make -f linux.mk all -j$(nproc)
 mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
 cd .. && rm -rf keeperfx
