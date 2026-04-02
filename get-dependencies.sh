@@ -7,20 +7,21 @@ ARCH=$(uname -m)
 echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
-    cmake       \
-    enet        \
-    libnatpmp   \
-    libspng     \
-    luajit      \
-    miniupnpc   \
-    minizip     \
-    openal      \
-    python      \
-    sdl2        \
-    sdl2_image  \
-    sdl2_mixer  \
-    sdl2_net    \
-    tl-expected
+    cmake          \
+    enet           \
+    libnatpmp      \
+    libspng        \
+    luajit         \
+    miniupnpc      \
+    minizip        \
+    openal         \
+    python         \
+    sdl2           \
+    sdl2_image     \
+    sdl2_mixer     \
+    sdl2_net       \
+    tl-expected    \
+    vulkan-headers
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
