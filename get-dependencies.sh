@@ -34,7 +34,7 @@ git clone --recursive https://github.com/dkfans/keeperfx
 mkdir -p ./AppDir/bin
 cd keeperfx
 sed -i 's/-Werror/-Wno-error/g' linux.mk
-make -f linux.mk all -j$(nproc)
+make -f linux.mk all -j$(nproc) CFLAGS+="-Ideps/enet6/include"
 mv -v bin/keeperfx ../AppDir/bin/keeperfx.exe
 cd .. && rm -rf keeperfx
 
