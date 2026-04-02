@@ -53,11 +53,10 @@ git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
 sed -i '2i find_package(tl-expected REQUIRED)' CMakeLists.txt
 sed -i -e 's/\/keeperfx\.exe/\/keeperfx/g' \
-       -e sed 's:wine:./keeperfx:g' src/game.cpp
+       -e 's:wine:./keeperfx:g' src/game.cpp
        #-e '/params\.prepend("wine");/d' \
        #-e '/process->start("wine", params);/d' src/game.cpp
-sed -i 's/\/keeperfx\.exe/\/keeperfx/g' src/kfxversion.cpp
-sed -i 's/\/keeperfx\.exe/\/keeperfx/g' src/launchermainwindow.cpp
+sed -i 's/\/keeperfx\.exe/\/keeperfx/g' src/kfxversion.cpp src/launchermainwindow.cpp
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
 make -j$(nproc)
