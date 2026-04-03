@@ -45,10 +45,10 @@ mkdir -p ./AppDir/bin
 
 wget https://github.com/dkfans/keeperfx/releases/download/v1.3.1/keeperfx_1_3_1_complete.7z
 #bsdtar -xvf keeperfx_1_3_1_complete.7z -C ./AppDir/bin --include="*/" --include="*.map"
-7zz x keeperfx_1_3_1_complete.7z -o./AppDir/bin -i!'*/*' -i!'*.map' -x!'*'
+7z x keeperfx_1_3_1_complete.7z -o./AppDir/bin '-i!*/*' '-i!*.map' '-x!*'
 wget https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z
 #bsdtar -xvf keeperfx-1_3_1_4948_Alpha-patch.7z -C ./AppDir/bin --include="*/" --include="*.map"
-7zz x keeperfx-1_3_1_4948_Alpha-patch.7z -o./AppDir/bin -i!'*/*' -i!'*.map' -x!'*'
+7z x keeperfx-1_3_1_4948_Alpha-patch.7z -o./AppDir/bin '-i!*/*' '-i!*.map' '-x!*'
 rm -f *.7z
 
 cd keeperfx
