@@ -41,9 +41,12 @@ REPO="https://github.com/dkfans/keeperfx"
 VERSION="$(git ls-remote "$REPO" HEAD | cut -c 1-9 | head -1)"
 git clone --recursive "$REPO" ./keeperfx
 echo "$VERSION" > ~/version
+mkdir -p ./AppDir/bin
 
-mkdir -p ./AppDir/bin && wget -qO- https://github.com/dkfans/keeperfx/releases/download/v1.3.1/keeperfx_1_3_1_complete.7z | bsdtar -xvf - -C ./AppDir/bin --include="*/" --include="*.map"
-wget -qO- https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z | bsdtar -xvf - -C ./AppDir/bin --include="*/" --include="*.map"
+wget -qO- https://github.com/dkfans/keeperfx/releases/download/v1.3.1/keeperfx_1_3_1_complete.7z
+bsdtar -xvf keeperfx_1_3_1_complete.7z -C ./AppDir/bin --include="*/" --include="*.map"
+wget -qO- https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z
+bsdtar -xvf keeperfx-1_3_1_4948_Alpha-patch.7z -C ./AppDir/bin --include="*/" --include="*.map"
 
 cd keeperfx
 mkdir -p deps/astronomy deps/centijson deps/enet6 deps/libcurl
