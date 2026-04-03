@@ -37,7 +37,11 @@ make-aur-package lief
 # If the application needs to be manually built that has to be done down here
 echo "Making Nightly build of KeeperFX..."
 echo "---------------------------------------------------------------"
-git clone --recursive https://github.com/dkfans/keeperfx
+REPO="https://github.com/dkfans/keeperfx"
+VERSION="$(git ls-remote "$REPO" HEAD | cut -c 1-9 | head -1)"
+git clone --recursive "$REPO" ./keeperfx
+echo "$VERSION" > ~/version
+
 mkdir -p ./AppDir/bin && wget -qO- https://github.com/dkfans/keeperfx/releases/download/v1.3.1/keeperfx_1_3_1_complete.7z | bsdtar -xvf - -C ./AppDir/bin --include="*/" --include="*.map"
 wget -qO- https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z | bsdtar -xvf - -C ./AppDir/bin --include="*/" --include="*.map"
 
