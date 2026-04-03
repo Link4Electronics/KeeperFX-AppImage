@@ -1,5 +1,11 @@
 #!/bin/false
 dir=${XDG_CONFIG_HOME:-~/.config}/keeperfx
 mkdir -p "$dir"
+if [ ! -f "$dir"/keeperfx.cfg ]; then
+cd "$dir"
+cat <<EOM > "keeperfx.cfg"
+INSTALL_PATH=$HOME/.config/keeperfx
+EOM
+fi
 ln -sf "$APPDIR"/bin/keeperfx "$dir"/keeperfx
 cd "$dir"
