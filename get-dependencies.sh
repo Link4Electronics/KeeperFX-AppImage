@@ -58,14 +58,7 @@ cd .. && rm -rf keeperfx
 
 git clone https://github.com/dkfans/QTLauncher
 cd QTLauncher
-sed -i '2i find_package(tl-expected REQUIRED)' CMakeLists.txt
-sed -i 's|/keeperfx.exe|/keeperfx|g' src/game.cpp src/launchermainwindow.cpp
-sed -i 's|params.prepend(keeperfxBin);|//params.prepend(keeperfxBin);|' src/game.cpp
-#sed -i -e 's/\/keeperfx\.exe/\/keeperfx/g' \
-       #-e 's:wine:./keeperfx:g' src/game.cpp
-       #-e '/params\.prepend("wine");/d' \ já estava comentado
-       #-e '/process->start("wine", params);/d' src/game.cpp já estava comentado
-#sed -i 's/\/keeperfx\.exe/\/keeperfx/g' src/kfxversion.cpp src/launchermainwindow.cpp
+patch -Np1 -i ../launcherfix.patch
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
 make -j$(nproc)
