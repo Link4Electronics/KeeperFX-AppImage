@@ -1,0 +1,48 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5cb09a4..7b66f9b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ cmake_minimum_required(VERSION 3.24)
+-
++find_package(tl-expected REQUIRED)
+ # Project settings
+ project(keeperfx-launcher-qt VERSION 0.1 LANGUAGES CXX)
+ 
+diff --git a/src/game.cpp b/src/game.cpp
+index 603b25a..794ffda 100644
+--- a/src/game.cpp
++++ b/src/game.cpp
+@@ -98,7 +98,7 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
+     if (Settings::getLauncherSetting("GAME_HEAVY_LOG_ENABLED").toBool() == true) {
+         keeperfxBin = QApplication::applicationDirPath() + "/keeperfx_hvlog.exe";
+     } else {
+-        keeperfxBin = QApplication::applicationDirPath() + "/keeperfx.exe";
++        keeperfxBin = QApplication::applicationDirPath() + "/keeperfx";
+     }
+ 
+     // Start the process
+@@ -116,8 +116,8 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
+         } else {
+             qInfo() << "Starting game (Linux: Wine)";
+             // Normal Wine execution
+-            params.prepend(keeperfxBin);
+-            process->start("wine", params);
++            //params.prepend(keeperfxBin);
++            process->start(keeperfxBin, params);
+         }
+     #endif
+ 
+diff --git a/src/launchermainwindow.cpp b/src/launchermainwindow.cpp
+index 2cfc0c2..9c92752 100644
+--- a/src/launchermainwindow.cpp
++++ b/src/launchermainwindow.cpp
+@@ -537,7 +537,7 @@ void LauncherMainWindow::on_workshopButton_clicked()
+ bool LauncherMainWindow::isKeeperFxInstalled()
+ {
+     // Check for 'keeperfx.exe' file in app directory
+-    QFile keeperFxBin (QCoreApplication::applicationDirPath() + "/keeperfx.exe");
++    QFile keeperFxBin (QCoreApplication::applicationDirPath() + "/keeperfx");
+     return (keeperFxBin.exists());
+ }
+ 
