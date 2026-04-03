@@ -42,9 +42,9 @@ git clone --recursive "$REPO" ./keeperfx
 echo "$VERSION" > ~/version
 mkdir -p ./AppDir/bin
 
-wget -qO- https://github.com/dkfans/keeperfx/releases/download/v1.3.1/keeperfx_1_3_1_complete.7z
+wget https://github.com/dkfans/keeperfx/releases/download/v1.3.1/keeperfx_1_3_1_complete.7z
 bsdtar -xvf keeperfx_1_3_1_complete.7z -C ./AppDir/bin --include="*/" --include="*.map"
-wget -qO- https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z
+wget https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z
 bsdtar -xvf keeperfx-1_3_1_4948_Alpha-patch.7z -C ./AppDir/bin --include="*/" --include="*.map"
 rm -f *.7z
 
