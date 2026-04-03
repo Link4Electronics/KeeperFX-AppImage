@@ -38,7 +38,8 @@ make-aur-package lief
 echo "Making Nightly build of KeeperFX..."
 echo "---------------------------------------------------------------"
 git clone --recursive https://github.com/dkfans/keeperfx
-mkdir -p ./AppDir/bin
+mkdir -p ./AppDir/bin && wget -qO- https://github.com/dkfans/keeperfx/releases/download/v1.3.1/keeperfx_1_3_1_complete.7z | bsdtar -xvf - -C ./AppDir/bin --include="*/" --include="*.map"
+wget -qO- https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z | bsdtar -xvf - -C ./AppDir/bin --include="*/" --include="*.map"
 cd keeperfx
 mkdir -p deps/astronomy deps/centijson deps/enet6 deps/libcurl
 curl -L -o deps/enet6-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/enet6-lin64.tar.gz"
