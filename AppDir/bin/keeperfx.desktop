@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=KeeperFX
-Comment="Open source remake and Fan Expansion of Dungeon Keeper"
-Icon=keeperfx_icon256-24bpp
-Exec=keeperfx-launcher-qt
-Terminal=false
-StartupWMClass=KeeperFX Launcher
-Categories=Game;RTS;Dungeon;
