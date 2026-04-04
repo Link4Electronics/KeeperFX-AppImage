@@ -8,10 +8,6 @@ export OUTPATH=./dist
 export ADD_HOOKS="self-updater.bg.hook"
 export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}|latest|*$ARCH.AppImage.zsync"
 export ICON=https://raw.githubusercontent.com/dkfans/keeperfx/refs/heads/master/res/keeperfx_icon256-24bpp.png
-export DESKTOP=DUMMY
-export APPNAME=KeeperFX
-export MAIN_BIN=keeperfx-launcher-qt
-export STARTUPWMCLASS=KeeperFX Launcher
 export DEPLOY_QT=1
 export QT_DIR=qt6
 
