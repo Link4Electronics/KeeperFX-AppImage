@@ -34,9 +34,18 @@ index 603b25a..794ffda 100644
      #endif
  
 diff --git a/src/launchermainwindow.cpp b/src/launchermainwindow.cpp
-index 2cfc0c2..9c92752 100644
+index 2cfc0c2..f4be93a 100644
 --- a/src/launchermainwindow.cpp
 +++ b/src/launchermainwindow.cpp
+@@ -225,7 +225,7 @@ LauncherMainWindow::LauncherMainWindow(QWidget *parent)
+ 
+     // Load keeperfx version if keeperfx is installed
+     if (isKeeperFxInstalled()) {
+-        if (KfxVersion::loadCurrentVersion() == true) {
++        if (KfxVersion::loadCurrentVersion() == false) {
+             // Refresh GUI
+             refreshKfxVersionInGui();
+ 
 @@ -537,7 +537,7 @@ void LauncherMainWindow::on_workshopButton_clicked()
  bool LauncherMainWindow::isKeeperFxInstalled()
  {
