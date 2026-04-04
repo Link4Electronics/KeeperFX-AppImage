@@ -7,5 +7,5 @@ mkdir -p "$dir"
 #INSTALL_PATH=$HOME/.config/keeperfx
 #EOM
 #fi
-ln -sf "$APPDIR"/bin/keeperfx "$dir"/keeperfx
+#ln -sf "$APPDIR"/bin/keeperfx "$dir"/keeperfx
 cd "$dir"
