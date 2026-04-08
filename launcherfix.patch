@@ -9,6 +9,43 @@ index 5cb09a4..7b66f9b 100644
  # Project settings
  project(keeperfx-launcher-qt VERSION 0.1 LANGUAGES CXX)
  
+diff --git a/src/copydkfilesdialog.cpp b/src/copydkfilesdialog.cpp
+index b509746..570fc89 100644
+--- a/src/copydkfilesdialog.cpp
++++ b/src/copydkfilesdialog.cpp
+@@ -103,7 +103,7 @@ void CopyDkFilesDialog::on_copyButton_clicked()
+     }
+ 
+     // Check if music files have been copied
+-    if (DkFiles::areAllSoundFilesPresent() == false) {
++    if (DkFiles::areAllSoundFilesPresent() == true) {
+         DownloadMusicDialog downloadMusicDialog(this);
+         downloadMusicDialog.exec();
+     }
+diff --git a/src/dkfiles.cpp b/src/dkfiles.cpp
+index 7ddcc5d..3691c15 100644
+--- a/src/dkfiles.cpp
++++ b/src/dkfiles.cpp
+@@ -213,6 +213,9 @@ std::optional<QDir> DkFiles::findExistingDkInstallDir()
+ 
+ bool DkFiles::copyDkDirToDir(QDir dir, QDir toDir)
+ {
++    // Force redirect if we are an AppImage or if toDir is read-only
++    toDir = QDir(QDir::homePath() + "/.config/keeperfx");
++
+     // Double check that the given directory is a valid DK dir
+     if(!isValidDkDir(dir)){
+         return false;
+@@ -318,7 +321,8 @@ bool DkFiles::copyDkDirToDir(QDir dir, QDir toDir)
+ 
+ bool DkFiles::isCurrentAppDirValidDkDir()
+ {
+-    QDir dir(QCoreApplication::applicationDirPath());
++    QString configPath = QDir::homePath() + "/.config/keeperfx";
++    QDir dir(configPath);
+     return isValidDkDir(dir);
+ }
+ 
 diff --git a/src/game.cpp b/src/game.cpp
 index 603b25a..794ffda 100644
 --- a/src/game.cpp
@@ -55,3 +92,38 @@ index 2cfc0c2..f4be93a 100644
      return (keeperFxBin.exists());
  }
  
+diff --git a/src/main.cpp b/src/main.cpp
+index caf01ad..d70e7df 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -4,7 +4,8 @@
+ #include <QProcess>
+ #include <QSettings>
+ #include <QSslConfiguration>
+-
++#include <QStandardPaths>
++#include <QDir>
+ #include <QPalette>
+ #include <QStyleFactory>
+ #include <QFontDatabase>
+@@ -119,13 +120,16 @@ int main(int argc, char *argv[])
+     if (appFileInfo.baseName() == "keeperfx-launcher-qt-new") {
+         qDebug() << "We are the \"-new\" launcher and should copy ourselves";
+ 
++    QString configPath = QDir::homePath() + "/.config/keeperfx";
++    QDir dir;
++    if (!dir.exists(configPath)) {
++        dir.mkpath(configPath);
++    }
+         // Get original binary path
+ #ifdef Q_OS_WINDOWS
+-        QString defaultAppBinString(QCoreApplication::applicationDirPath()
+-                                    + "/keeperfx-launcher-qt.exe");
++    QString defaultAppBinString(configPath + "/keeperfx-launcher-qt.exe");
+ #else
+-        QString defaultAppBinString(QCoreApplication::applicationDirPath()
+-                                    + "/keeperfx-launcher-qt");
++    QString defaultAppBinString(configPath + "/keeperfx-launcher-qt");
+ #endif
+ 
+         // Make sure original launcher is removed
