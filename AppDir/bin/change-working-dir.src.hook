@@ -2,19 +2,9 @@
 dir=${XDG_CONFIG_HOME:-~/.config}/keeperfx
 mkdir -p "$dir"
 if [ ! -f "$dir"/keeperfx.cfg ]; then
-cp -r "$APPDIR"/bin/campgns "$dir"
-cp -r "$APPDIR"/bin/creatrs "$dir"
-cp -rf "$APPDIR"/bin/data "$dir"
-cp -r "$APPDIR"/bin/fxdata "$dir"
-cp -r "$APPDIR"/bin/ldata "$dir"
-cp -r "$APPDIR"/bin/levels "$dir"
-cp -r "$APPDIR"/bin/mods "$dir"
-cp -rf "$APPDIR"/bin/music "$dir"
-cp -r "$APPDIR"/bin/save "$dir"
-cp -r "$APPDIR"/bin/scrshots "$dir"
-cp -rf "$APPDIR"/bin/sound "$dir"
-cp "$APPDIR"/bin/keeperfx.map "$dir"
-cp "$APPDIR"/bin/keeperfx_hvlog.map "$dir"
+cp -r "$APPDIR"/bin/campgns "$APPDIR"/bin/creatrs "$APPDIR"/bin/fxdata "$APPDIR"/bin/ldata "$APPDIR"/bin/levels "$APPDIR"/bin/mods "$APPDIR"/bin/save "$APPDIR"/bin/scrshots "$dir"
+cp -rf "$APPDIR"/bin/data "$APPDIR"/bin/music "$APPDIR"/bin/sound "$dir"
+cp "$APPDIR"/bin/keeperfx.map "$APPDIR"/bin/keeperfx_hvlog.map "$dir"
 #cd "$dir"
 #cat <<EOM > "keeperfx.cfg"
 #INSTALL_PATH=$HOME/.config/keeperfx
