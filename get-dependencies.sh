@@ -70,7 +70,7 @@ if [ "$ARCH" = "aarch64" ]; then
     git clone https://github.com/cosinekitty/astronomy
     cd astronomy
     cc -c source/c/astronomy.c -o astronomy.o
-    ar rcs astronomy.a astronomy.o
+    ar rcs libastronomy.a astronomy.o
     find . ! -name . -prune ! -name source ! -name astronomy.a -exec rm -rf {} +
     mv -v ./source ./include
     mv -v include/c/astronomy.h include/astronomy.h
