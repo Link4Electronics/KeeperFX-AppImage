@@ -70,9 +70,12 @@ if [ "$ARCH" = "aarch64" ]; then
     cd ..
     git clone https://github.com/cosinekitty/astronomy
     cd astronomy
-    cmake -DCMAKE_BUILD_TYPE=Release .
-    make -j$(nproc)
-    
+    cc -c source/c/astronomy.c -o astronomy.o
+    ar rcs astronomy.a astronomy.o
+    find . ! -name . -prune ! -name source ! -name astronomy.a -exec rm -rf {} +
+    mv -v ./source ./include
+    mv -v include/c/astronomy.h include/astronomy.h
+    cd ..
     sed -i 's/x86-64/armv8-a/g' Makefile linux.mk
     make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
 else
