@@ -50,18 +50,27 @@ wget https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z
 rm -f *.7z
 
 cd keeperfx
-mkdir -p deps/astronomy deps/centijson deps/enet6 deps/libcurl
-curl -L -o deps/enet6-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/enet6-lin64.tar.gz"
-tar -xzvf deps/enet6-lin64.tar.gz -C deps/enet6
-curl -L -o deps/centijson-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/centijson-lin64.tar.gz"
-tar -xzvf deps/centijson-lin64.tar.gz -C deps/centijson
+
 
 sed -i 's/-Werror/-Wno-error/g' linux.mk
 if [ "$ARCH" = "aarch64" ]; then
+    cd deps
+    git clone https://github.com/SirLynix/enet6
+    cd enet6
+    cmake -DCMAKE_BUILD_TYPE=Release .
+    make -j$(nproc)
+    find . ! -name . -prune ! -name include ! -name libenet6.a -exec rm -rf {} +
+    cd ..
+    
     sed -i 's/x86-64/armv8-a/g' Makefile linux.mk
     make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
 else
-make -f linux.mk all -j$(nproc)
+    mkdir -p deps/astronomy deps/centijson deps/enet6 deps/libcurl
+    curl -L -o deps/enet6-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/enet6-lin64.tar.gz"
+    tar -xzvf deps/enet6-lin64.tar.gz -C deps/enet6
+    curl -L -o deps/centijson-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/centijson-lin64.tar.gz"
+    tar -xzvf deps/centijson-lin64.tar.gz -C deps/centijson
+    make -f linux.mk all -j$(nproc)
 fi
 patchelf --set-rpath '$PWD/.config/keeperfx' bin/keeperfx
 mv -v bin/keeperfx ../AppDir/bin
