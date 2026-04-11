@@ -58,8 +58,7 @@ tar -xzvf deps/centijson-lin64.tar.gz -C deps/centijson
 
 sed -i 's/-Werror/-Wno-error/g' linux.mk
 if [ "$ARCH" = "aarch64" ]; then
-    sed -i 's/x86-64/armv8-a/g' Makefile
-    sed -i 's/x86-64/armv8-a/g' linux.mk
+    sed -i 's/x86-64/armv8-a/g' Makefile linux.mk
     make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
 else
 make -f linux.mk all -j$(nproc)
