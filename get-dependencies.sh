@@ -49,8 +49,6 @@ wget https://keeperfx.net/download/alpha/keeperfx-1_3_1_4948_Alpha-patch.7z
 rm -f *.7z
 
 cd keeperfx
-
-
 sed -i 's/-Werror/-Wno-error/g' linux.mk
 if [ "$ARCH" = "aarch64" ]; then
     cd deps
@@ -85,7 +83,7 @@ else
     tar -xzvf deps/centijson-lin64.tar.gz -C deps/centijson
     make -f linux.mk all -j$(nproc)
 fi
-patchelf --set-rpath '$PWD/.config/keeperfx' bin/keeperfx
+patchelf --set-rpath '$ORIGIN/.' bin/keeperfx
 mv -v bin/keeperfx ../AppDir/bin
 cd .. && rm -rf keeperfx
 echo "Making Nightly build of QTLauncher..."
