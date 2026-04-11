@@ -66,6 +66,7 @@ if [ "$ARCH" = "aarch64" ]; then
 else
 make -f linux.mk all -j$(nproc)
 fi
+patchelf --set-rpath '$PWD/.config/keeperfx' bin/keeperfx
 mv -v bin/keeperfx ../AppDir/bin
 cd .. && rm -rf keeperfx
 echo "Making Nightly build of QTLauncher..."
