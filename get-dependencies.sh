@@ -68,6 +68,10 @@ if [ "$ARCH" = "aarch64" ]; then
     find . ! -name . -prune ! -name src ! -name libjson.a -exec rm -rf {} +
     mv -v ./src ./include
     cd ..
+    git clone https://github.com/cosinekitty/astronomy
+    cd astronomy
+    cmake -DCMAKE_BUILD_TYPE=Release .
+    make -j$(nproc)
     
     sed -i 's/x86-64/armv8-a/g' Makefile linux.mk
     make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
