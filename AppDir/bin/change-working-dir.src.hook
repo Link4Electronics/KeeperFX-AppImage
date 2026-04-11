@@ -5,11 +5,11 @@ if [ ! -f "$dir"/keeperfx.cfg ]; then
 cp -r "$APPDIR"/bin/campgns "$APPDIR"/bin/creatrs "$APPDIR"/bin/fxdata "$APPDIR"/bin/ldata "$APPDIR"/bin/levels "$APPDIR"/bin/mods "$APPDIR"/bin/save "$APPDIR"/bin/scrshots "$dir"
 cp -rf "$APPDIR"/bin/data "$APPDIR"/bin/music "$APPDIR"/bin/sound "$dir"
 cp "$APPDIR"/bin/keeperfx.map "$APPDIR"/bin/keeperfx_hvlog.map "$dir"
-#cd "$dir"
+cd "$dir"
+sed -i '$ a INSTALL_PATH=$dir' keeperfx.cfg
 #cat <<EOM > "keeperfx.cfg"
 #INSTALL_PATH=$HOME/.config/keeperfx
 #EOM
 fi
 #ln -sf "$APPDIR"/bin/keeperfx "$dir"/keeperfx
-
 cd "$dir"
