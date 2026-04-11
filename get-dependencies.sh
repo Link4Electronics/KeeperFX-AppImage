@@ -61,6 +61,13 @@ if [ "$ARCH" = "aarch64" ]; then
     make -j$(nproc)
     find . ! -name . -prune ! -name include ! -name libenet6.a -exec rm -rf {} +
     cd ..
+    git clone https://github.com/mity/centijson
+    cd centijson
+    cmake -DCMAKE_BUILD_TYPE=Release .
+    make -j$(nproc)
+    find . ! -name . -prune ! -name src ! -name libjson.a -exec rm -rf {} +
+    mv -v ./src ./include
+    cd ..
     
     sed -i 's/x86-64/armv8-a/g' Makefile linux.mk
     make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
