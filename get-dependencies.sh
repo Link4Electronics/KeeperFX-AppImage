@@ -71,7 +71,7 @@ if [ "$ARCH" = "aarch64" ]; then
     cd astronomy
     cc -c source/c/astronomy.c -o astronomy.o
     ar rcs libastronomy.a astronomy.o
-    find . ! -name . -prune ! -name source ! -name astronomy.a -exec rm -rf {} +
+    find . ! -name . -prune ! -name source ! -name libastronomy.a -exec rm -rf {} +
     mv -v ./source ./include
     mv -v include/c/astronomy.h include/astronomy.h
     cd ../..
