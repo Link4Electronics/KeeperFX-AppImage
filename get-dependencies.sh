@@ -76,7 +76,7 @@ if [ "$ARCH" = "aarch64" ]; then
     mv -v include/c/astronomy.h include/astronomy.h
     cd ../..
     sed -i 's/x86-64/armv8-a/g' Makefile linux.mk
-    make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
+    make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" CPPCHECK=true all -j$(nproc)
 else
     mkdir -p deps/astronomy deps/centijson deps/enet6 deps/libcurl
     curl -L -o deps/enet6-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260310/enet6-lin64.tar.gz"
