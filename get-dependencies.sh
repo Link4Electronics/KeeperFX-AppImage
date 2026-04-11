@@ -74,7 +74,7 @@ if [ "$ARCH" = "aarch64" ]; then
     find . ! -name . -prune ! -name source ! -name astronomy.a -exec rm -rf {} +
     mv -v ./source ./include
     mv -v include/c/astronomy.h include/astronomy.h
-    cd ..
+    cd .../..
     sed -i 's/x86-64/armv8-a/g' Makefile linux.mk
     make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
 else
