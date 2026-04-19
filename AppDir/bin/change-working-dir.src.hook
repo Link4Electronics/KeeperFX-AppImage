@@ -1,5 +1,5 @@
 #!/bin/false
-dir=${XDG_CONFIG_HOME:-~/.config}/keeperfx
+dir=$CONFIGDIR/keeperfx
 mkdir -p "$dir"
 if [ ! -f "$dir"/keeperfx.cfg ]; then
 cp -r "$APPDIR"/bin/campgns "$APPDIR"/bin/creatrs "$APPDIR"/bin/fxdata "$APPDIR"/bin/ldata "$APPDIR"/bin/levels "$APPDIR"/bin/mods "$APPDIR"/bin/save "$APPDIR"/bin/scrshots "$dir"
