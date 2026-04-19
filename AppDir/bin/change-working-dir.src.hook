@@ -1,4 +1,4 @@
-#!/bin/false
+#!/bin/sh
 dir=$CONFIGDIR/keeperfx
 mkdir -p "$dir"
 if [ ! -f "$dir"/keeperfx.cfg ]; then
