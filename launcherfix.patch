@@ -23,7 +23,7 @@ index b509746..570fc89 100644
          downloadMusicDialog.exec();
      }
 diff --git a/src/dkfiles.cpp b/src/dkfiles.cpp
-index 7ddcc5d..3691c15 100644
+index e402062..ad2266b 100644
 --- a/src/dkfiles.cpp
 +++ b/src/dkfiles.cpp
 @@ -213,6 +213,9 @@ std::optional<QDir> DkFiles::findExistingDkInstallDir()
@@ -36,7 +36,7 @@ index 7ddcc5d..3691c15 100644
      // Double check that the given directory is a valid DK dir
      if(!isValidDkDir(dir)){
          return false;
-@@ -318,7 +321,8 @@ bool DkFiles::copyDkDirToDir(QDir dir, QDir toDir)
+@@ -338,7 +341,8 @@ bool DkFiles::copyDkDirToDir(QDir dir, QDir toDir)
  
  bool DkFiles::isCurrentAppDirValidDkDir()
  {
@@ -47,10 +47,10 @@ index 7ddcc5d..3691c15 100644
  }
  
 diff --git a/src/game.cpp b/src/game.cpp
-index 603b25a..794ffda 100644
+index 140a68f..b27c721 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -98,7 +98,7 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
+@@ -104,7 +104,7 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
      if (Settings::getLauncherSetting("GAME_HEAVY_LOG_ENABLED").toBool() == true) {
          keeperfxBin = QApplication::applicationDirPath() + "/keeperfx_hvlog.exe";
      } else {
@@ -59,7 +59,7 @@ index 603b25a..794ffda 100644
      }
  
      // Start the process
-@@ -116,8 +116,8 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
+@@ -122,8 +122,8 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
          } else {
              qInfo() << "Starting game (Linux: Wine)";
              // Normal Wine execution
@@ -71,29 +71,20 @@ index 603b25a..794ffda 100644
      #endif
  
 diff --git a/src/launchermainwindow.cpp b/src/launchermainwindow.cpp
-index 2cfc0c2..f4be93a 100644
+index 9414ff2..99905ca 100644
 --- a/src/launchermainwindow.cpp
 +++ b/src/launchermainwindow.cpp
-@@ -225,7 +225,7 @@ LauncherMainWindow::LauncherMainWindow(QWidget *parent)
+@@ -241,7 +241,7 @@ LauncherMainWindow::LauncherMainWindow(QWidget *parent)
  
      // Load keeperfx version if keeperfx is installed
-     if (isKeeperFxInstalled()) {
+     if (Helper::isKeeperFxInstalled()) {
 -        if (KfxVersion::loadCurrentVersion() == true) {
 +        if (KfxVersion::loadCurrentVersion() == false) {
              // Refresh GUI
              refreshKfxVersionInGui();
  
-@@ -537,7 +537,7 @@ void LauncherMainWindow::on_workshopButton_clicked()
- bool LauncherMainWindow::isKeeperFxInstalled()
- {
-     // Check for 'keeperfx.exe' file in app directory
--    QFile keeperFxBin (QCoreApplication::applicationDirPath() + "/keeperfx.exe");
-+    QFile keeperFxBin (QCoreApplication::applicationDirPath() + "/keeperfx");
-     return (keeperFxBin.exists());
- }
- 
 diff --git a/src/main.cpp b/src/main.cpp
-index caf01ad..d70e7df 100644
+index b6276ec..e768403 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
 @@ -4,7 +4,8 @@
@@ -106,7 +97,7 @@ index caf01ad..d70e7df 100644
  #include <QPalette>
  #include <QStyleFactory>
  #include <QFontDatabase>
-@@ -119,13 +120,16 @@ int main(int argc, char *argv[])
+@@ -81,13 +82,16 @@ int main(int argc, char *argv[])
      if (appFileInfo.baseName() == "keeperfx-launcher-qt-new") {
          qDebug() << "We are the \"-new\" launcher and should copy ourselves";
  
@@ -119,11 +110,11 @@ index caf01ad..d70e7df 100644
  #ifdef Q_OS_WINDOWS
 -        QString defaultAppBinString(QCoreApplication::applicationDirPath()
 -                                    + "/keeperfx-launcher-qt.exe");
-+    QString defaultAppBinString(configPath + "/keeperfx-launcher-qt.exe");
++        QString defaultAppBinString(configPath + "/keeperfx-launcher-qt.exe");
  #else
 -        QString defaultAppBinString(QCoreApplication::applicationDirPath()
 -                                    + "/keeperfx-launcher-qt");
-+    QString defaultAppBinString(configPath + "/keeperfx-launcher-qt");
++        QString defaultAppBinString(configPath + "/keeperfx-launcher-qt");
  #endif
  
          // Make sure original launcher is removed
