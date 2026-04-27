@@ -1,4 +1,5 @@
 #!/bin/sh
+export SHARUN_DIR="$APPDIR"
 dir=$CONFIGDIR/keeperfx
 mkdir -p "$dir"
 if [ ! -f "$dir"/keeperfx.cfg ]; then
