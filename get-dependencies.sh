@@ -83,13 +83,13 @@ else
     tar -xzvf deps/centijson-lin64.tar.gz -C deps/centijson
     make -f linux.mk all -j$(nproc)
 fi
-patchelf --set-rpath '$ORIGIN/.' bin/keeperfx
+#patchelf --set-rpath '$ORIGIN/.' bin/keeperfx
 mv -v bin/keeperfx ../AppDir/bin
 cd .. && rm -rf keeperfx
 echo "Making Nightly build of QTLauncher..."
 echo "---------------------------------------------------------------"
-git clone https://github.com/dkfans/QTLauncher
-cd QTLauncher
+git clone https://github.com/dkfans/keeperfx-launcher-qt
+cd keeperfx-launcher-qt
 patch -Np1 -i ../launcherfix.patch
 mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
