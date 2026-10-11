@@ -17,10 +17,8 @@ pacman -Syu --noconfirm \
     miniupnpc      \
     minizip        \
     openal         \
-    python         \
     qt6ct          \
     sdl2           \
-    sdl2_image     \
     sdl2_mixer     \
     sdl2_net       \
     tl-expected    \
@@ -28,7 +26,7 @@ pacman -Syu --noconfirm \
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
-get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini
+get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini sdl2_image-mini
 
 # Comment this out if you need an AUR package
 make-aur-package lief
