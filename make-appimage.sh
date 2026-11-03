@@ -10,6 +10,10 @@ export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}
 export ICON=https://raw.githubusercontent.com/dkfans/keeperfx/refs/heads/master/res/keeperfx_icon256-24bpp.png
 export DEPLOY_QT=1
 export QT_DIR=qt6
+export PATH_MAPPING='
+/usr/lib/qt6:${SHARUN_DIR}/lib/qt6
+/usr/share/qt6:${SHARUN_DIR}/share/qt6
+'
 
 # Deploy dependencies
 quick-sharun ./AppDir/bin/keeperfx-launcher-qt ./AppDir/bin/keeperfx
