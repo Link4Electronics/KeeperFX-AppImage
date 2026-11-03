@@ -1,16 +1,38 @@
 #!/bin/sh
 export SHARUN_DIR="$APPDIR"
-dir=$CONFIGDIR/keeperfx
-mkdir -p "$dir"
-if [ ! -f "$dir"/keeperfx.cfg ]; then
-cp -r "$APPDIR"/bin/campgns "$APPDIR"/bin/creatrs "$APPDIR"/bin/fxdata "$APPDIR"/bin/ldata "$APPDIR"/bin/levels "$APPDIR"/bin/mods "$APPDIR"/bin/save "$APPDIR"/bin/scrshots "$dir"
-cp -rf "$APPDIR"/bin/data "$APPDIR"/bin/music "$APPDIR"/bin/sound "$dir"
-cp "$APPDIR"/bin/keeperfx.map "$APPDIR"/bin/keeperfx_hvlog.map "$dir"
-cd "$dir"
-sed -i '$ a INSTALL_PATH=$dir' keeperfx.cfg
-#cat <<EOM > "keeperfx.cfg"
-#INSTALL_PATH=$HOME/.config/keeperfx
-#EOM
+
+dir=${XDG_CONFIG_HOME:-$HOME/.config}/keeperfx
+mkdir -p "$dir"/save "$dir"/scrshots "$dir"/replays
+
+for d in campgns creatrs data fxdata ldata levels mods multiplayer music sound; do
+    [ -d "$APPDIR"/bin/"$d" ] || continue
+    mkdir -p "$dir"/"$d"
+    find "$dir"/"$d" -mindepth 1 -maxdepth 1 -xtype l -delete
+    for f in "$APPDIR"/bin/"$d"/*; do
+        [ -e "$f" ] || continue
+        ln -sfn "$f" "$dir"/"$d"/"${f##*/}"
+    done
+done
+
+ln -sfn "$APPDIR"/bin/keeperfx "$dir"/keeperfx
+
+for f in keeperfx-version.txt 7z.so launcher-auto-file-removal.txt; do
+    [ -f "$APPDIR"/bin/"$f" ] || continue
+    cmp -s "$APPDIR"/bin/"$f" "$dir"/"$f" || cp -f "$APPDIR"/bin/"$f" "$dir"/"$f"
+done
+
+for f in keeperfx.cfg _keeperfx.cfg; do
+    [ -f "$APPDIR"/bin/"$f" ] || continue
+    [ -f "$dir"/"$f" ] || cp -f "$APPDIR"/bin/"$f" "$dir"/"$f"
+done
+
+if ! cmp -s "$APPDIR"/bin/keeperfx-launcher-qt "$dir"/keeperfx-launcher-qt; then
+    cp -f "$APPDIR"/bin/keeperfx-launcher-qt "$dir"/keeperfx-launcher-qt.new
+    mv -f "$dir"/keeperfx-launcher-qt.new "$dir"/keeperfx-launcher-qt
 fi
-#ln -sf "$APPDIR"/bin/keeperfx "$dir"/keeperfx
+
 cd "$dir"
+
+if [ -x "$dir"/keeperfx-launcher-qt ]; then
+    exec "$dir"/keeperfx-launcher-qt "$@"
+fi

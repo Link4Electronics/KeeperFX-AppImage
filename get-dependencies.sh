@@ -8,7 +8,7 @@ echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
     cmake          \
-    enet           \
+    curl           \
     kvantum        \
     libnatpmp      \
     libspng        \
@@ -16,19 +16,57 @@ pacman -Syu --noconfirm \
     lxqt-qtplugin  \
     miniupnpc      \
     minizip        \
+    ninja          \
     openal         \
     qt6ct          \
-    sdl2_mixer     \
-    sdl2_net       \
-    tl-expected    \
-    vulkan-headers
+    sdl3_image     \
+    sdl3_mixer
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
-get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini sdl2_image-mini
+get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini qt6-base-mini
 
-# Comment this out if you need an AUR package
-make-aur-package lief
+echo "Building dependencies..."
+echo "---------------------------------------------------------------"
+git clone --depth 1 https://github.com/SirLynix/enet6
+cmake -S ./enet6 -B ./enet6-build -G Ninja \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX=/usr \
+      -DCMAKE_INSTALL_LIBDIR=lib \
+      -DBUILD_SHARED_LIBS=OFF
+cmake --build ./enet6-build
+cmake --install ./enet6-build
+rm -rf ./enet6 ./enet6-build
+
+git clone --depth 1 https://github.com/mity/centijson
+cmake -S ./centijson -B ./centijson-build -G Ninja \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DBUILD_TESTS=OFF \
+      -DBUILD_UTILS=OFF
+cmake --build ./centijson-build
+install -Dm644 ./centijson/src/json.h /usr/include/json.h
+install -Dm644 "$(find ./centijson-build -name libjson.a -print -quit)" /usr/lib/libjson.a
+rm -rf ./centijson ./centijson-build
+
+git clone --depth 1 https://github.com/cosinekitty/astronomy
+cc -O2 -c ./astronomy/source/c/astronomy.c -o ./astronomy.o
+ar rcs ./libastronomy.a ./astronomy.o
+install -Dm644 ./astronomy/source/c/astronomy.h /usr/include/astronomy.h
+install -Dm644 ./libastronomy.a /usr/lib/libastronomy.a
+rm -rf ./astronomy ./astronomy.o ./libastronomy.a
+
+echo "Getting KeeperFX game data..."
+echo "---------------------------------------------------------------"
+mkdir -p ./AppDir/bin
+wget https://github.com/dkfans/keeperfx/releases/download/v1.4.0/keeperfx_1_4_0_complete.7z
+bsdtar -xf ./keeperfx_1_4_0_complete.7z -C ./AppDir/bin \
+    --exclude '*.exe' --exclude '*.dll' --exclude '*.DLL' --exclude '*.map' \
+    --exclude '*.jpg' --exclude '*.sh'
+rm -f ./keeperfx_1_4_0_complete.7z
+wget https://keeperfx.net/download/alpha/keeperfx-1_4_0_5588-Alpha-patch.7z
+bsdtar -xf ./keeperfx-1_4_0_5588-Alpha-patch.7z -C ./AppDir/bin \
+    --exclude '*.exe' --exclude '*.dll' --exclude '*.DLL' --exclude '*.map' --exclude '*.sh'
+rm -f ./keeperfx-1_4_0_5588-Alpha-patch.7z
 
 echo "Making Nightly build of KeeperFX..."
 echo "---------------------------------------------------------------"
@@ -37,58 +75,20 @@ VERSION="$(git ls-remote "$REPO" HEAD | cut -c 1-9 | head -1)"
 git clone --recursive "$REPO" ./keeperfx
 echo "$VERSION" > ~/version
 
-mkdir -p ./AppDir/bin
-wget https://github.com/dkfans/keeperfx/releases/download/v1.4.0/keeperfx_1_4_0_complete.7z
-7z x ./*.7z -o./AppDir/bin '-x!*.exe' '-x!*.dll' '-x!*.DLL' '-x!*.jpg' '-x!*.txt' '-x!*.sh' '-x!*.cfg'
-rm -f ./*.7z
-wget https://keeperfx.net/download/alpha/keeperfx-1_4_0_5588-Alpha-patch.7z
-7z x ./*.7z -o./AppDir/bin -aoa '-x!*.exe' '-x!*.dll' '-x!*.txt' '-x!*.sh' '-x!*.cfg'
-rm -f ./*.7z
+patch -d ./keeperfx -Np1 -i ../patches/keeperfx-system-deps.patch
+cmake -S ./keeperfx -B ./keeperfx-build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build ./keeperfx-build --target keeperfx -j"$(nproc)"
+mv -v ./keeperfx-build/keeperfx ./AppDir/bin
+awk -F= '/^VER_MAJOR=/{a=$2} /^VER_MINOR=/{b=$2} /^VER_RELEASE=/{c=$2} /^VER_BUILD=/{d=$2} END{print a"."b"."c"."d}' \
+    ./keeperfx/version.mk > ./AppDir/bin/keeperfx-version.txt
+rm -rf ./keeperfx ./keeperfx-build
 
-cd ./keeperfx
-sed -i 's/-Werror/-Wno-error/g' linux.mk
-if [ "$ARCH" = "aarch64" ]; then
-    cd deps
-    git clone https://github.com/SirLynix/enet6
-    cd enet6
-    cmake -DCMAKE_BUILD_TYPE=Release .
-    make -j$(nproc)
-    find . ! -name . -prune ! -name include ! -name libenet6.a -exec rm -rf {} +
-    cd ..
-    git clone https://github.com/mity/centijson
-    cd centijson
-    cmake -DCMAKE_BUILD_TYPE=Release .
-    make -j$(nproc)
-    find . ! -name . -prune ! -name src ! -name libjson.a -exec rm -rf {} +
-    mv -v ./src ./include
-    cd ..
-    git clone https://github.com/cosinekitty/astronomy
-    cd astronomy
-    cc -c source/c/astronomy.c -o astronomy.o
-    ar rcs libastronomy.a astronomy.o
-    find . ! -name . -prune ! -name source ! -name libastronomy.a -exec rm -rf {} +
-    mv -v ./source ./include
-    mv -v include/c/astronomy.h include/astronomy.h
-    cd ../..
-    sed -i 's/x86-64/armv8-a/g' Makefile linux.mk
-    make -f linux.mk CXX="g++ -fsigned-char -Wno-error=narrowing" CC="gcc -fsigned-char" all -j$(nproc)
-else
-    mkdir -p deps/astronomy deps/centijson deps/enet6 deps/libcurl
-    curl -L -o deps/enet6-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260806/enet6-lin64.tar.gz"
-    tar -xzvf deps/enet6-lin64.tar.gz -C deps/enet6
-    curl -L -o deps/centijson-lin64.tar.gz "https://github.com/dkfans/kfx-deps/releases/download/20260806/centijson-lin64.tar.gz"
-    tar -xzvf deps/centijson-lin64.tar.gz -C deps/centijson
-    make -f linux.mk all -j$(nproc)
-fi
-#patchelf --set-rpath '$ORIGIN/.' bin/keeperfx
-mv -v bin/keeperfx ../AppDir/bin
-cd .. && rm -rf ./keeperfx
 echo "Making Nightly build of QTLauncher..."
 echo "---------------------------------------------------------------"
-git clone https://github.com/dkfans/keeperfx-launcher-qt
-cd ./keeperfx-launcher-qt
-patch -Np1 -i ../launcherfix.patch
-mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=None -DCMAKE_CXX_FLAGS="-Wno-error=unused-result -O3"
-make -j$(nproc)
-mv -v ./keeperfx-launcher-qt ../../AppDir/bin
+git clone --depth 1 https://github.com/dkfans/keeperfx-launcher-qt
+patch -d ./keeperfx-launcher-qt -Np1 -i ../patches/launcherfix.patch
+cmake -S ./keeperfx-launcher-qt -B ./launcher-build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build ./launcher-build -j"$(nproc)"
+mv -v ./launcher-build/keeperfx-launcher-qt ./AppDir/bin
+mv -v ./keeperfx-launcher-qt/ext/7z.so ./AppDir/bin
+rm -rf ./keeperfx-launcher-qt ./launcher-build
