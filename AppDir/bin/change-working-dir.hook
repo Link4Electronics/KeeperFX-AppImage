@@ -24,6 +24,8 @@ if [ -f "$APPDIR"/bin/keeperfx-launcher-qt ]; then
     mv -f "$dir"/keeperfx-launcher-qt.new "$dir"/keeperfx-launcher-qt
 fi
 
+rm -f "$dir"/qt.conf
+
 cd "$dir"
 
 if [ -x "$dir"/keeperfx-launcher-qt ]; then
