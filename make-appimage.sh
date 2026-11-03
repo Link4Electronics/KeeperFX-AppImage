@@ -13,7 +13,6 @@ export QT_DIR=qt6
 
 # Deploy dependencies
 quick-sharun ./AppDir/bin/keeperfx-launcher-qt ./AppDir/bin/keeperfx
-echo 'SHARUN_WORKING_DIR=${SHARUN_DIR}/bin' >> ./AppDir/.env
 echo 'QT_PLUGIN_PATH=${SHARUN_DIR}/lib/qt6/plugins' >> ./AppDir/.env
 echo 'QT_QPA_PLATFORM_PLUGIN_PATH=${SHARUN_DIR}/lib/qt6/plugins/platforms' >> ./AppDir/.env
 
