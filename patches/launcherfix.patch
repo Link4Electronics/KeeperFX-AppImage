@@ -1,63 +1,8 @@
-diff --git a/src/copydkfilesdialog.cpp b/src/copydkfilesdialog.cpp
-index b509746..e79fae2 100644
---- a/src/copydkfilesdialog.cpp
-+++ b/src/copydkfilesdialog.cpp
-@@ -5,6 +5,7 @@
- #include <QFileDialog>
- #include <QMainWindow>
- #include <QMessageBox>
-+#include <QTemporaryFile>
- 
- #include "dkfiles.h"
- #include "downloadmusicdialog.h"
-@@ -89,14 +90,15 @@ void CopyDkFilesDialog::on_copyButton_clicked()
-         return;
-     }
- 
--    // Check if app dir is writable
--    QFileInfo appDirFileInfo(QCoreApplication::applicationDirPath());
--    if(appDirFileInfo.isWritable() == false){
-+    // Copy the files
-+    QDir toDir(QCoreApplication::applicationDirPath());
-+
-+    QTemporaryFile writeTest(toDir.absolutePath() + "/kfx-write-test.XXXXXX");
-+    if (writeTest.open() == false) {
-         QMessageBox::warning(this, tr("Failed to copy files", "MessageBox Title"), tr("The current directory is not writable.", "MessageBox Text"));
-+        return;
-     }
- 
--    // Copy the files
--    QDir toDir(QCoreApplication::applicationDirPath());
-     if(!DkFiles::copyDkDirToDir(dkDir, toDir)){
-         QMessageBox::warning(this, tr("Failed to copy files", "MessageBox Title"), tr("Something went wrong while copying the files.", "MessageBox Text"));
-         return;
 diff --git a/src/game.cpp b/src/game.cpp
-index 4d18c96..c7316e2 100644
+index 4d18c96..36f6d9e 100644
 --- a/src/game.cpp
 +++ b/src/game.cpp
-@@ -5,6 +5,7 @@
- #include <QFileInfo>
- #include <QMessageBox>
- #include "crashdialog.h"
-+#include "dkfiles.h"
- #include "kfxversion.h"
- #include "settings.h"
- 
-@@ -52,6 +53,13 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
-     // Refresh error
-     this->errorString = QString();
- 
-+    if (DkFiles::isCurrentAppDirValidDkDir() == false) {
-+        this->errorString = tr("The files from the original Dungeon Keeper are missing from the "
-+                               "game directory.\n\nPoint the launcher at your Dungeon Keeper "
-+                               "installation so it can copy them over, then start the game again.");
-+        return false;
-+    }
-+
-     // Log some stuff
-     qInfo() << "Setting up game for start";
-     qInfo() << "Start type:" << Game::getStringFromStartType(startType);
-@@ -102,9 +110,17 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
+@@ -102,9 +102,17 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
      // For now it's only the .exe release
      QString keeperfxBin;
      if (Settings::getLauncherSetting("GAME_HEAVY_LOG_ENABLED").toBool() == true) {
@@ -75,7 +20,7 @@ index 4d18c96..c7316e2 100644
      }
  
      // Start the process
-@@ -112,19 +128,8 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
+@@ -112,19 +120,8 @@ bool Game::start(StartType startType, QVariant data1, QVariant data2, QVariant d
          qInfo() << "Starting game (Windows)";
          process->start(keeperfxBin, params);
      #else
