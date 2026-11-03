@@ -1,3 +1,74 @@
+diff --git a/src/copydkfilesdialog.cpp b/src/copydkfilesdialog.cpp
+index b509746..e79fae2 100644
+--- a/src/copydkfilesdialog.cpp
++++ b/src/copydkfilesdialog.cpp
+@@ -5,6 +5,7 @@
+ #include <QFileDialog>
+ #include <QMainWindow>
+ #include <QMessageBox>
++#include <QTemporaryFile>
+ 
+ #include "dkfiles.h"
+ #include "downloadmusicdialog.h"
+@@ -89,14 +90,15 @@ void CopyDkFilesDialog::on_copyButton_clicked()
+         return;
+     }
+ 
+-    // Check if app dir is writable
+-    QFileInfo appDirFileInfo(QCoreApplication::applicationDirPath());
+-    if(appDirFileInfo.isWritable() == false){
++    // Copy the files
++    QDir toDir(QCoreApplication::applicationDirPath());
++
++    QTemporaryFile writeTest(toDir.absolutePath() + "/kfx-write-test.XXXXXX");
++    if (writeTest.open() == false) {
+         QMessageBox::warning(this, tr("Failed to copy files", "MessageBox Title"), tr("The current directory is not writable.", "MessageBox Text"));
++        return;
+     }
+ 
+-    // Copy the files
+-    QDir toDir(QCoreApplication::applicationDirPath());
+     if(!DkFiles::copyDkDirToDir(dkDir, toDir)){
+         QMessageBox::warning(this, tr("Failed to copy files", "MessageBox Title"), tr("Something went wrong while copying the files.", "MessageBox Text"));
+         return;
+diff --git a/src/dkfiles.cpp b/src/dkfiles.cpp
+index e402062..d7b5a3b 100644
+--- a/src/dkfiles.cpp
++++ b/src/dkfiles.cpp
+@@ -8,6 +8,7 @@
+ #include <QSettings>
+ #include <QStandardPaths>
+ #include <QUrl>
++#include <QDebug>
+ 
+ #include "helper.h"
+ 
+@@ -249,10 +250,12 @@ bool DkFiles::copyDkDirToDir(QDir dir, QDir toDir)
+                 QFile copyDestFile(copyDest);
+                 if(copyDestFile.exists()){
+                     if(copyDestFile.remove() == false){
++                        qWarning() << "Could not remove" << copyDest;
+                         return false;
+                     }
+                 }
+                 if(file.copy(copyDest) == false) {
++                    qWarning() << "Could not copy" << file.fileName() << "to" << copyDest;
+                     return false;
+                 }
+                 break;
+@@ -271,10 +274,12 @@ bool DkFiles::copyDkDirToDir(QDir dir, QDir toDir)
+                 QFile copyDestFile(copyDest);
+                 if(copyDestFile.exists()){
+                     if(copyDestFile.remove() == false){
++                        qWarning() << "Could not remove" << copyDest;
+                         return false;
+                     }
+                 }
+                 if(file.copy(copyDest) == false) {
++                    qWarning() << "Could not copy" << file.fileName() << "to" << copyDest;
+                     return false;
+                 }
+                 break;
 diff --git a/src/game.cpp b/src/game.cpp
 index 4d18c96..36f6d9e 100644
 --- a/src/game.cpp
