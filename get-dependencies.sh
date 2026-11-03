@@ -67,6 +67,11 @@ bsdtar -xf ./keeperfx-1_4_0_5588-Alpha-patch.7z -C ./AppDir/bin \
     --exclude '*.exe' --exclude '*.dll' --exclude '*.DLL' --exclude '*.map' --exclude '*.sh'
 rm -f ./keeperfx-1_4_0_5588-Alpha-patch.7z
 
+grep -v '^#' ./AppDir/bin/launcher-auto-file-removal.txt | grep -v '^\[' | grep -v '^[[:space:]]*$' \
+    | tr -d '\r' | while read -r f; do
+        rm -f "./AppDir/bin/${f#/}"
+    done
+
 echo "Making Nightly build of KeeperFX..."
 echo "---------------------------------------------------------------"
 REPO="https://github.com/dkfans/keeperfx"
