@@ -43,15 +43,15 @@ cmake -S ./centijson -B ./centijson-build -G Ninja \
       -DBUILD_TESTS=OFF \
       -DBUILD_UTILS=OFF
 cmake --build ./centijson-build
-install -Dm644 ./centijson/src/json.h /usr/include/json.h
-install -Dm644 "$(find ./centijson-build -name libjson.a -print -quit)" /usr/lib/libjson.a
+cp ./centijson/src/*.h /usr/include/
+cp "$(find ./centijson-build -name libjson.a -print -quit)" /usr/lib/libjson.a
 rm -rf ./centijson ./centijson-build
 
 git clone --depth 1 https://github.com/cosinekitty/astronomy
 cc -O2 -c ./astronomy/source/c/astronomy.c -o ./astronomy.o
 ar rcs ./libastronomy.a ./astronomy.o
-install -Dm644 ./astronomy/source/c/astronomy.h /usr/include/astronomy.h
-install -Dm644 ./libastronomy.a /usr/lib/libastronomy.a
+cp ./astronomy/source/c/astronomy.h /usr/include/astronomy.h
+cp ./libastronomy.a /usr/lib/libastronomy.a
 rm -rf ./astronomy ./astronomy.o ./libastronomy.a
 
 echo "Getting KeeperFX game data..."
